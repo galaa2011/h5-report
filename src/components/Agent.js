@@ -5,8 +5,10 @@ require('normalize.css/normalize.css');
 require('styles/App.css');
 
 // Bootstrap
-require('bootstrap/dist/js/bootstrap');
-require('bootstrap/dist/css/bootstrap.css');
+// require('bootstrap/dist/js/bootstrap');
+// require('bootstrap/dist/css/bootstrap.css');
+import 'bootstrap/dist/js/bootstrap';
+import 'bootstrap/dist/css/bootstrap.css';
 require('bootstrap-table/dist/bootstrap-table');
 require('bootstrap-table/dist/bootstrap-table.css');
 
