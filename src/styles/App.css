@@ -1,0 +1,28 @@
+/* Base Application Styles */
+.app {
+	margin-top: 1rem;
+}
+.chart-container {
+	width: 100%;
+	height: 30rem;
+	clear: both;
+}
+.filter-container {
+	margin-top: 3rem;
+}
+.total {
+	margin-bottom: 1rem;
+	float: right;
+}
+.total-info {
+	display: block;
+	width: 100%;
+	margin-bottom: .1rem;
+	padding: .2em .6em .3em;
+	font-size: 75%;
+	font-weight: bold;
+	line-height: 1;
+}
+.table {
+	clear: both;
+}

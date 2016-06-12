@@ -1,0 +1,8 @@
+{
+  "generator-react-webpack": {
+    "appName": "h5Report",
+    "style": "css",
+    "postcss": true,
+    "generatedWithVersion": 3
+  }
+}
