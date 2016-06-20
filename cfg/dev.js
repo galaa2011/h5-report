@@ -10,13 +10,13 @@ let BowerWebpackPlugin = require('bower-webpack-plugin');
 
 let config = Object.assign({}, baseConfig, {
   entry: {
-    'agent/app': [
+    'js/app': [
       'whatwg-fetch',
       'webpack-dev-server/client?http://127.0.0.1:' + defaultSettings.port,
       'webpack/hot/only-dev-server',
       './src/index'
     ],
-    'agent/agent': ['./src/components/Agent']
+    'js/login': ['./src/login']
   },
   cache: true,
   devtool: 'sourcemap',

@@ -74,6 +74,7 @@
     "normalize.css": "^4.0.0",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
+    "react-router": "^2.4.1",
     "whatwg-fetch": "^1.0.0"
   }
 }

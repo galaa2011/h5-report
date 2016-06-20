@@ -1,6 +1,6 @@
 /* Base Application Styles */
 .app {
-	margin-top: 1rem;
+	/*margin-top: 1rem;*/
 }
 .chart-container {
 	width: 100%;
@@ -23,6 +23,88 @@
 	font-weight: bold;
 	line-height: 1;
 }
-.table {
+.dataTable {
 	clear: both;
+	margin-bottom: 5rem;
+}
+.today {
+	width: 20%;
+}
+.yesterday {
+	width: 20%;
+}
+.lastWeek {
+	width: 30%;
+}
+.season {
+	width: 30%;
+}
+.tabFilter {
+	margin-bottom: 2rem;
+}
+.tabFilter li {
+	text-align: center;
+}
+.tabFilter li a {
+	margin-right: 0px !important;
+}
+.tabFooter ul {
+	background: #F6F6F6;
+}
+.tabFooter li {
+	text-align: center;
+}
+.tabFooter li a {
+	margin-right: 0px !important;
+}
+.footer-client {
+	width: 100%;
+}
+.footer-agent {
+	width: 50%;
+}
+.footer-advertiser {
+	width: 50%;
+}
+.tab-total {
+	width: 25%;
+}
+.tab-pc {
+	width: 25%;
+}
+.tab-wap {
+	width: 25%;
+}
+.tab-date {
+	width: 25%;
+}
+/*._caret {
+	display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-top: 4px solid \9;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}*/
+
+.login {
+	margin: 25% 0;
+	background: #eee;
+	padding: 1rem 0;
+	border-radius: 5px;
+}
+.login button {
+	width: 100%;
+}
+.loginlogo {
+	width: 178px;
+    height: 58px;
+    margin: 0 auto 1rem;
+    background: url(../images/logo.png) no-repeat;
+}
+.login-body {
+	background: url(../images/bodybg.jpg);
 }

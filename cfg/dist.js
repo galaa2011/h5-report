@@ -13,8 +13,8 @@ let ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 let config = Object.assign({}, baseConfig, {
   entry: {
-    'agent/app': ['whatwg-fetch', path.join(__dirname, '../src/index')],
-    'agent/agent': ['./src/components/Agent']
+    'js/app': ['whatwg-fetch', path.join(__dirname, '../src/index')],
+    'js/login': ['./src/login']
   },
   cache: false,
   devtool: 'sourcemap',
@@ -31,15 +31,20 @@ let config = Object.assign({}, baseConfig, {
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.NoErrorsPlugin(),
     // new ExtractTextPlugin("styles/[name].css"),
-    new HtmlWebpackPlugin({
-      title: '代理商',
-      template: './src/agent/agent.html',
-      filename: './agent/agent.html',
-      chunks: ['agent/agent']
-    }),
     new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery"
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'commons',
+      filename: 'js/commons.js',
+      chunks: ['js/app', 'js/login']
+    }),
+    new HtmlWebpackPlugin({
+      title: '登录',
+      template: './src/login.html',
+      filename: '../login.html',
+      chunks: ['commons', 'js/login']
     })
   ],
   module: defaultSettings.getDefaultModules()

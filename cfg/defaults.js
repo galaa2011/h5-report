@@ -14,7 +14,7 @@ function getDefaultModules() {
       {
         test: /\.css$/,
         // loader: ExtractTextPlugin.extract("style-loader", "css-loader")
-        loader: 'style-loader!css-loader?root=../!postcss-loader'
+        loader: 'style-loader!css-loader?!postcss-loader'
       },
       {
         test: /\.sass/,
@@ -33,11 +33,11 @@ function getDefaultModules() {
         loader: 'style-loader!css-loader!postcss-loader!stylus-loader'
       },
       {
-        test: /\.(ico|png|jpg|gif|woff|woff2)$/,
-        loader: 'url-loader?limit=8192&name=fonts/[hash:8].[name].[ext]'
+        test: /\.(ico|png|jpg|gif)$/,
+        loader: 'url-loader?limit=8192&name=images/[hash:8].[name].[ext]'
       },
       {
-        test: /\.(mp4|ogg|svg|eot|ttf)$/,
+        test: /\.(mp4|ogg|svg|eot|ttf|woff|woff2)$/,
         loader: 'file-loader?name=fonts/[hash:8].[name].[ext]'
       }
     ]
