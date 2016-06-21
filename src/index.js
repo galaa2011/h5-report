@@ -14,7 +14,7 @@ let api = require('./common/config').api;
 
 // Render the main component into the dom
 // 判断代理商还是客户
-if (false) {
+if (true) {
 	ReactDOM.render((
 		<Router history={hashHistory}>
 			<Route path="/" component={Base}>

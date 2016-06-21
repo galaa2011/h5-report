@@ -29,6 +29,11 @@ let config = Object.assign({}, baseConfig, {
     new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery"
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'commons',
+      filename: 'js/commons.js',
+      chunks: ['js/app', 'js/login']
     })
   ],
   module: defaultSettings.getDefaultModules()

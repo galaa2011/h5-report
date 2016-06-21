@@ -17,7 +17,7 @@ class Login extends React.Component {
 	render() {
 		return (
 			<div className="login container">
-				<div className="loginlogo">
+				<div className="login-logo">
 				</div>
 				<form role="form">
 				  <div className="form-group">

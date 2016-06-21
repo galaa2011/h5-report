@@ -44,7 +44,7 @@ let config = Object.assign({}, baseConfig, {
       title: '登录',
       template: './src/login.html',
       filename: '../login.html',
-      chunks: ['commons', 'js/login']
+      chunks: []
     })
   ],
   module: defaultSettings.getDefaultModules()
