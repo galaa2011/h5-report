@@ -3,11 +3,15 @@
 let baseConfig = {};
 
 let apiConfig = {
-	getAgentInfo: 'https://api.github.com/users/octocat/gists'
+	login: '/api/login',
+	a_summaryall: '/api/agent/summaryall',
+	a_costByDay: '/api/agent/costByDay',
+	a_clientStat: '/api/agent/clientStat',
+	a_dayStat: '/api/agent/dayStat'
 };
 let mainTable = {
 	columns: [{
-		field: 'pv',
+		field: 'impression',
 		title: 'PV'
 	}, {
 		field: 'click',
@@ -19,14 +23,14 @@ let mainTable = {
 		field: 'cpc',
 		title: 'CPC'
 	}, {
-		field: 'ecpm',
+		field: 'eCpm',
 		title: 'eCPM',
 		formatter: function(value, row, index) {
 			value = $.trim(value);
 			return value;
 		}
 	}, {
-		field: 'consume',
+		field: 'cost',
 		title: '消耗'
 	}],
 	responseHandler: function(res) {
@@ -87,11 +91,11 @@ let detailTable = {
 	showToggle: true,
 	search: true,
 	pagination: true,
-	sidePagination: 'server',
-	url: apiConfig.getAgentInfo,
+	// sidePagination: 'server',
+	// url: apiConfig.a_dayStat,
 	pageList: [10, 25, 50, 100, 'ALL'],
 	columns: [{
-		field: 'date',
+		field: 'statDate',
 		sortable: true,
 		title: '日期'
 	}, {
@@ -164,16 +168,19 @@ let advertiserTable = {
 	pagination: true,
 	pageList: [10, 25, 50, 100, 'ALL'],
 	columns: [{
-		field: 'advertiser',
+		field: 'clientName',
 		title: '广告主'
 	}, {
 		field: 'click',
+		sortable: true,
 		title: '点击'
 	}, {
 		field: 'cpc',
+		sortable: true,
 		title: 'CPC'
 	}, {
 		field: 'ctr',
+		sortable: true,
 		title: 'CTR'
 	}],
 	responseHandler: function(res) {

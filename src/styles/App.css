@@ -56,6 +56,10 @@
 }
 .tab-date {
 	width: 25%;
+	float: left;
+}
+.date-select {
+	width: 100%;
 }
 .login {
 	margin: 25% 0;

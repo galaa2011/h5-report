@@ -25,7 +25,15 @@ module.exports = {
     hot: true,
     port: defaultSettings.port,
     publicPath: defaultSettings.publicPath,
-    noInfo: false
+    noInfo: false,
+    proxy: {
+      '/api/*': {
+        target: 'http://10.13.224.74:9090/',
+        rewrite: function(req) {
+          req.url = req.url.replace(/^\/api/, '');
+        }
+      }
+    }
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],

@@ -27,29 +27,30 @@ class Chart extends React.Component {
 		);
 	}
 	componentDidUpdate() {
-		// let series = this.props.data.series;
-		let series = [{
-			name: 'PC',
-			type: 'line',
-			stack: '总量',
-			areaStyle: {
-				normal: {}
-			},
-			data: [120, 132, 101, 134, 90, 230, 210]
-		}, {
-			name: '无线',
-			type: 'line',
-			stack: '总量',
-			areaStyle: {
-				normal: {}
-			},
-			data: [150, 232, 201, 154, 190, 330, 410]
-		}];
-		let xAxis = [{
-			type: 'category',
-			boundaryGap: false,
-			data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-		}];
+		let series = this.props.data.series;
+		let xAxis = this.props.data.xAxis;
+		// let series = [{
+		// 	name: 'PC',
+		// 	type: 'line',
+		// 	stack: '总量',
+		// 	areaStyle: {
+		// 		normal: {}
+		// 	},
+		// 	data: [120, 132, 101, 134, 90, 230, 210]
+		// }, {
+		// 	name: '无线',
+		// 	type: 'line',
+		// 	stack: '总量',
+		// 	areaStyle: {
+		// 		normal: {}
+		// 	},
+		// 	data: [150, 232, 201, 154, 190, 330, 410]
+		// }];
+		// let xAxis = [{
+		// 	type: 'category',
+		// 	boundaryGap: false,
+		// 	data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+		// }];
 		this.option.baseOption.series = series;
 		this.option.baseOption.xAxis = xAxis;
 		this.myChart.clear();
@@ -114,9 +115,6 @@ class Chart extends React.Component {
 						{
 							radius: [20, '50%'],
 							center: ['50%', '30%']
-						}, {
-							radius: [30, '50%'],
-							center: ['50%', '70%']
 						}
 					]
 				}

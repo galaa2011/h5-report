@@ -70,11 +70,14 @@
     "bootstrap-table": "^1.10.1",
     "core-js": "^2.0.0",
     "echarts": "^3.1.10",
+    "es6-promise": "^3.2.1",
     "jquery": "^2.2.4",
+    "moment": "^2.14.1",
     "normalize.css": "^4.0.0",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
     "react-router": "^2.4.1",
+    "url-search-params": "^0.5.0",
     "whatwg-fetch": "^1.0.0"
   }
 }

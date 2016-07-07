@@ -1,9 +1,13 @@
+import 'core-js/fn/array/map';
 require('normalize.css/normalize.css');
 require('styles/App.css');
 
 import React from 'react';
 import { Link } from 'react-router';
+require('es6-promise').polyfill();
 import 'whatwg-fetch';
+import moment from 'moment';
+import URLSearchParams from 'url-search-params';
 import Chart from 'components/base/Chart';
 import Table from 'components/base/Table';
 
@@ -23,10 +27,10 @@ class Tab extends React.Component {
 	render() {
 		return (
 			<ul className="nav nav-tabs">
-			   <li className="active today"><a href="#home" data-toggle="tab" onClick={this.handleChange(1)}>今日</a></li>
-			   <li className="yesterday"><a href="#detail" data-toggle="tab">昨天</a></li>
-			   <li className="lastWeek"><a href="#ios" data-toggle="tab">过去7天</a></li>
-			   <li className="season"><a href="#ios" data-toggle="tab">过去30天</a></li>
+			   <li className="active today"><a href="#" data-toggle="tab" onClick={this.handleChange(0)}>今日</a></li>
+			   <li className="yesterday"><a href="#" data-toggle="tab" onClick={this.handleChange(1)}>昨天</a></li>
+			   <li className="lastWeek"><a href="#" data-toggle="tab" onClick={this.handleChange(7)}>过去7天</a></li>
+			   <li className="season"><a href="#" data-toggle="tab" onClick={this.handleChange(30)}>过去30天</a></li>
 			</ul>
 		);
 	}
@@ -79,22 +83,60 @@ class Agent extends React.Component {
 			table: []
 		};
 	}
+	loadData(value) {
+		let _this = this;
+		let startDate = moment().subtract(value, 'd').format('YYYY-MM-DD');
+		let endDate = moment().format('YYYY-MM-DD');
+		let u = new URLSearchParams();
+		u.append('startDate', startDate);
+		u.append('endDate', endDate);
+		// 两个请求，都完成后再进行state的变化。
+		Promise.all([
+				fetch(config.api.a_summaryall + '?' + u, {credentials: 'same-origin'}).then(response => response.json()),
+				fetch(config.api.a_costByDay + '?' + u, {credentials: 'same-origin'}).then(response => response.json())
+			])
+			.then((jsons) => {
+				let table = [],
+					chart = {},
+					series_data = [],
+					xAxis_data = [];
+				if (jsons[0].code == 0) {
+					table.push(jsons[0].result);
+				}
+				if (jsons[1].code == 0) {
+					jsons[1].result.map(data => {
+						series_data.push(data.cost);
+						xAxis_data.push(data.statDate);
+					});
+				}
+				this.setState({
+					chart: {
+						series: [{
+							name: 'PC',
+							type: 'line',
+							stack: '总量',
+							areaStyle: {
+								normal: {}
+							},
+							data: series_data
+						}],
+						xAxis: [{
+							type: 'category',
+							boundaryGap: false,
+							data: xAxis_data
+						}]
+					},
+					table: table
+				});
+			}).catch(e => {
+				console.log(e);
+				alert('数据获取失败');
+			});
+	}
 	query() {
 		return function(value) {
 			let _this = this;
-			fetch(_this.props.source)
-				.then(function(response) {
-					return response.json();
-				}).then(function(json) {
-					console.log(json);
-					_this.setState({
-						table: [{
-							pv: 3400,
-							click: 55200,
-							ctr: 90000
-						}]
-					});
-				});
+			_this.loadData(value);
 		}.bind(this);
 	}
 	render() {
@@ -118,15 +160,7 @@ class Agent extends React.Component {
 	}
 	componentDidMount() {
 		let _this = this;
-		// fetch(_this.props.source)
-		fetch('https://api.github.com/users/octocat/gists')
-			.then(function(response) {
-				return response.json();
-			}).then(function(json) {
-				_this.setState({
-					
-				});
-			});
+		_this.loadData(0);
 	}
 }
 

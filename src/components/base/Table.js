@@ -25,12 +25,7 @@ class Table extends React.Component {
 	}
 	componentDidUpdate() {
 		let data = this.props.data;
-		let data2 = [{
-			pv: 100,
-			click: 200,
-			ctr: 3000000
-		}];
-		$(this.refs.table).bootstrapTable('load', data.length != 0 ? data : data2);
+		$(this.refs.table).bootstrapTable('load', data);
 	}
 	componentDidMount() {
 		let data = this.props.data;

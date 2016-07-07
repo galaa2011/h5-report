@@ -1,9 +1,12 @@
-require('normalize.css/normalize.css');
+﻿require('normalize.css/normalize.css');
 require('styles/App.css');
 
 import React from 'react';
 import { Link } from 'react-router';
+require('es6-promise').polyfill();
 import 'whatwg-fetch';
+import moment from 'moment';
+import URLSearchParams from 'url-search-params';
 import Table from 'components/base/Table';
 
 // Bootstrap
@@ -14,27 +17,31 @@ require('bootstrap/dist/css/bootstrap.css');
 let config = require('../../common/config');
 
 class Tab extends React.Component {
-	handleChange(value) {
+	handleChange(tag, value) {
 		return function(e) {
-			this.props.query(value);
+			this.props.query(tag, value);
 		}.bind(this);
 	}
 	render() {
 		return (
-			<ul className="nav nav-tabs">
-				<li className="dropdown active tab-date">
-		      		<a href="#" id="myTabDrop1" className="dropdown-toggle" data-toggle="dropdown">日期<b className="caret"></b></a>
-		      		<ul className="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
-		         		<li style={{textAlign: 'left'}}><a href="#jmeter" tabindex="-1" data-toggle="tab">今日</a></li>
-		         		<li style={{textAlign: 'left'}}><a href="#ejb" tabindex="-1" data-toggle="tab">昨日</a></li>
-		         		<li style={{textAlign: 'left'}}><a href="#jmeter" tabindex="-1" data-toggle="tab">过去7天</a></li>
-		         		<li style={{textAlign: 'left'}}><a href="#ejb" tabindex="-1" data-toggle="tab">过去30天</a></li>
-		            </ul>
-		        </li>
-			   	<li className="tab-total"><a href="#home" data-toggle="tab" onClick={this.handleChange(1)}>汇总</a></li>
-			   	<li className="tab-pc"><a href="#detail" data-toggle="tab">PC</a></li>
-			   	<li className="tab-wap"><a href="#ios" data-toggle="tab">无线</a></li>
-			</ul>
+			<div>
+				<ul className="nav nav-tabs tab-date">
+					<li className="dropdown active date-select">
+			      		<a href="#" id="tabDrop" className="dropdown-toggle" data-toggle="dropdown">日期<b className="caret"></b></a>
+			      		<ul className="dropdown-menu" role="menu" aria-labelledby="tabDrop">
+			         		<li style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 0)}>今日</a></li>
+			         		<li style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 1)}>昨日</a></li>
+			         		<li style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 7)}>过去7天</a></li>
+			         		<li style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 30)}>过去30天</a></li>
+			            </ul>
+			        </li>
+				</ul>
+				<ul className="nav nav-tabs">
+				   	<li className="active tab-total"><a href="#" data-toggle="tab" onClick={this.handleChange('plat', -1)}>汇总</a></li>
+				   	<li className="tab-pc"><a href="#" data-toggle="tab" onClick={this.handleChange('plat', 0)}>PC</a></li>
+				   	<li className="tab-wap"><a href="#" data-toggle="tab" onClick={this.handleChange('plat', 1)}>无线</a></li>
+				</ul>
+			</div>
 		);
 	}
 }
@@ -59,17 +66,14 @@ class Detail extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			filter: {
-				today: '',
-				yesterday: '',
-				lastWeek: '',
-				season: ''
-			},
 			table: []
 		};
 	}
+	loadData(date, plat) {
+
+	}
 	query() {
-		return function(value) {
+		return function(tag, value) {
 			let _this = this;
 			fetch(_this.props.source)
 				.then(function(response) {
@@ -105,21 +109,28 @@ class Detail extends React.Component {
 	componentDidMount() {
 		let _this = this;
 		_this._isMounted = true;
-		// fetch(_this.props.source)
-		fetch('https://api.github.com/users/octocat/gists')
+		// 定义参数
+		let startDate = moment().subtract(_this._date || 0, 'd').format('YYYY-MM-DD');
+		let endDate = moment().format('YYYY-MM-DD');
+		let u = new URLSearchParams();
+		u.append('startDate', startDate);
+		u.append('endDate', endDate);
+		u.append('webType', _this._plat || -1);
+		// 发送请求
+		fetch(config.api.a_dayStat + '?' + u, {credentials: 'same-origin'})
 			.then(function(response) {
-				return response.json();
+				if (response.ok) {
+					return response.json();
+				}
 			}).then(function(json) {
-				if (_this._isMounted) {
+				if (_this._isMounted && json && json.code == 0) {
 					_this.setState({
-						filter: {
-							today: '78902',
-							yesterday: '78902',
-							lastWeek: '78902',
-							season: '1234567890'
-						}
+						table: json.result
 					});
 				}
+			}).catch(e => {
+				console.log(e);
+				alert('数据获取失败');
 			});
 	}
 	componentWillUnmount() {

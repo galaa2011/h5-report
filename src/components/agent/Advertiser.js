@@ -3,7 +3,10 @@ require('styles/App.css');
 
 import React from 'react';
 import { Link } from 'react-router';
+require('es6-promise').polyfill();
 import 'whatwg-fetch';
+import moment from 'moment';
+import URLSearchParams from 'url-search-params';
 import Table from 'components/base/Table';
 
 // Bootstrap
@@ -22,10 +25,10 @@ class Tab extends React.Component {
 	render() {
 		return (
 			<ul className="nav nav-tabs">
-			   <li className="active today"><a href="#home" data-toggle="tab" onClick={this.handleChange(1)}>今日</a></li>
-			   <li className="yesterday"><a href="#detail" data-toggle="tab">昨天</a></li>
-			   <li className="lastWeek"><a href="#ios" data-toggle="tab">过去7天</a></li>
-			   <li className="season"><a href="#ios" data-toggle="tab">过去30天</a></li>
+			   <li className="active today"><a href="#" data-toggle="tab" onClick={this.handleChange(0)}>今日</a></li>
+			   <li className="yesterday"><a href="#" data-toggle="tab" onClick={this.handleChange(1)}>昨天</a></li>
+			   <li className="lastWeek"><a href="#" data-toggle="tab" onClick={this.handleChange(7)}>过去7天</a></li>
+			   <li className="season"><a href="#" data-toggle="tab" onClick={this.handleChange(30)}>过去30天</a></li>
 			</ul>
 		);
 	}
@@ -51,37 +54,39 @@ class Advertiser extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			filter: {
-				today: '',
-				yesterday: '',
-				lastWeek: '',
-				season: ''
-			},
 			table: []
 		};
+	}
+	loadData(value) {
+		let _this = this;
+		// 定义参数
+		let startDate = moment().subtract(value, 'd').format('YYYY-MM-DD');
+		let endDate = moment().format('YYYY-MM-DD');
+		let u = new URLSearchParams();
+		u.append('startDate', startDate);
+		u.append('endDate', endDate);
+		u.append('webType', -1);
+		// 发送请求
+		fetch(config.api.a_clientStat + '?' + u, {credentials: 'same-origin'})
+			.then(function(response) {
+				if (response.ok) {
+					return response.json();
+				}
+			}).then(function(json) {
+				if (_this._isMounted && json && json.code == 0) {
+					_this.setState({
+						table: json.result
+					});
+				}
+			}).catch(e => {
+				console.log(e);
+				alert('数据获取失败');
+			});
 	}
 	query() {
 		return function(value) {
 			let _this = this;
-			fetch(_this.props.source)
-				.then(function(response) {
-					return response.json();
-				}).then(function(json) {
-					console.log(json);
-					_this.setState({
-						filter: {
-							today: '78902',
-							yesterday: '78902',
-							lastWeek: '78902',
-							season: '1234567890'
-						},
-						table: [{
-							pv: 3400,
-							click: 55200,
-							ctr: 90000
-						}]
-					});
-				});
+			_this.loadData(value);
 		}.bind(this);
 	}
 	render() {
@@ -103,22 +108,7 @@ class Advertiser extends React.Component {
 	componentDidMount() {
 		let _this = this;
 		_this._isMounted = true;
-		// fetch(_this.props.source)
-		fetch('https://api.github.com/users/octocat/gists')
-			.then(function(response) {
-				return response.json();
-			}).then(function(json) {
-				if (_this._isMounted) {
-					_this.setState({
-						filter: {
-							today: '78902',
-							yesterday: '78902',
-							lastWeek: '78902',
-							season: '1234567890'
-						}
-					});
-				}
-			});
+		_this.loadData(0);
 	}
 	componentWillUnmount() {
 		this._isMounted = false;
