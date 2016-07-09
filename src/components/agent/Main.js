@@ -27,26 +27,22 @@ class Tab extends React.Component {
 	render() {
 		return (
 			<ul className="nav nav-tabs">
-			   <li className="active today"><a href="#" data-toggle="tab" onClick={this.handleChange(0)}>今日</a></li>
-			   <li className="yesterday"><a href="#" data-toggle="tab" onClick={this.handleChange(1)}>昨天</a></li>
-			   <li className="lastWeek"><a href="#" data-toggle="tab" onClick={this.handleChange(7)}>过去7天</a></li>
-			   <li className="season"><a href="#" data-toggle="tab" onClick={this.handleChange(30)}>过去30天</a></li>
+			   <li className="active today"><a href="#" data-toggle="tab" onClick={this.handleChange(0)}>{config.i18n.Today}</a></li>
+			   <li className="yesterday"><a href="#" data-toggle="tab" onClick={this.handleChange(1)}>{config.i18n.Yesterday}</a></li>
+			   <li className="lastWeek"><a href="#" data-toggle="tab" onClick={this.handleChange(7)}>{config.i18n.GQQT}</a></li>
+			   <li className="season"><a href="#" data-toggle="tab" onClick={this.handleChange(30)}>{config.i18n.GQSST}</a></li>
 			</ul>
 		);
 	}
 }
 
 class Footer extends React.Component {
-	handleChange(value) {
-		return function(e) {
-			this.props.query(value);
-		}.bind(this);
-	}
 	render() {
 		return (
 			<ul className="nav nav-tabs navbar-fixed-bottom">
-			   <li className="active footer-agent"><Link to="/main">代理商</Link></li>
-			   <li className="footer-advertiser"><Link to="/advertiser">广告主</Link></li>
+			   <li className="active footer-agent"><Link to="/main">{config.i18n.Agent}</Link></li>
+			   <li className="footer-advertiser"><Link to="/advertiser">{config.i18n.Advertiser}</Link></li>
+			   <li className="footer-me"><Link to="/about/1">{config.i18n.About}</Link></li>
 			</ul>
 		);
 	}

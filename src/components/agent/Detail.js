@@ -27,19 +27,19 @@ class Tab extends React.Component {
 			<div>
 				<ul className="nav nav-tabs tab-date">
 					<li className="dropdown active date-select">
-			      		<a href="#" id="tabDrop" className="dropdown-toggle" data-toggle="dropdown">日期<b className="caret"></b></a>
+			      		<a href="#" id="tabDrop" className="dropdown-toggle" data-toggle="dropdown">{config.i18n.RQ}<b className="caret"></b></a>
 			      		<ul className="dropdown-menu" role="menu" aria-labelledby="tabDrop">
-			         		<li style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 0)}>今日</a></li>
-			         		<li style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 1)}>昨日</a></li>
-			         		<li style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 7)}>过去7天</a></li>
-			         		<li style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 30)}>过去30天</a></li>
+			         		<li className="active" style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 0)}>{config.i18n.Today}</a></li>
+			         		<li style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 1)}>{config.i18n.Yesterday}</a></li>
+			         		<li style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 7)}>{config.i18n.GQQT}</a></li>
+			         		<li style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 30)}>{config.i18n.GQSST}</a></li>
 			            </ul>
 			        </li>
 				</ul>
 				<ul className="nav nav-tabs">
-				   	<li className="active tab-total"><a href="#" data-toggle="tab" onClick={this.handleChange('plat', -1)}>汇总</a></li>
-				   	<li className="tab-pc"><a href="#" data-toggle="tab" onClick={this.handleChange('plat', 0)}>PC</a></li>
-				   	<li className="tab-wap"><a href="#" data-toggle="tab" onClick={this.handleChange('plat', 1)}>无线</a></li>
+				   	<li className="active tab-total"><a href="#" data-toggle="tab" onClick={this.handleChange('plat', -1)}>{config.i18n.ALL}</a></li>
+				   	<li className="tab-pc"><a href="#" data-toggle="tab" onClick={this.handleChange('plat', 0)}>{config.i18n.PC}</a></li>
+				   	<li className="tab-wap"><a href="#" data-toggle="tab" onClick={this.handleChange('plat', 1)}>{config.i18n.WAP}</a></li>
 				</ul>
 			</div>
 		);
@@ -47,16 +47,12 @@ class Tab extends React.Component {
 }
 
 class Footer extends React.Component {
-	handleChange(value) {
-		return function(e) {
-			this.props.query(value);
-		}.bind(this);
-	}
 	render() {
 		return (
 			<ul className="nav nav-tabs navbar-fixed-bottom">
-			   <li className="footer-agent"><Link to="/main">代理商</Link></li>
-			   <li className="footer-advertiser"><Link to="/advertiser">广告主</Link></li>
+			   <li className="footer-agent"><Link to="/main">{config.i18n.Agent}</Link></li>
+			   <li className="footer-advertiser"><Link to="/advertiser">{config.i18n.Advertiser}</Link></li>
+			   <li className="footer-me"><Link to="/about/1">{config.i18n.About}</Link></li>
 			</ul>
 		);
 	}
@@ -70,24 +66,45 @@ class Detail extends React.Component {
 		};
 	}
 	loadData(date, plat) {
-
+		let _this = this;
+		date = date === undefined ? 0 : date;
+		plat = plat === undefined ? -1 : plat;
+		// 定义参数
+		let startDate = moment().subtract(date, 'd').format('YYYY-MM-DD');
+		let endDate = moment().format('YYYY-MM-DD');
+		let u = new URLSearchParams();
+		u.append('startDate', startDate);
+		u.append('endDate', endDate);
+		u.append('webType', plat);
+		// 发送请求
+		fetch(config.api.a_dayStat + '?' + u, {
+				credentials: 'same-origin'
+			})
+			.then(function(response) {
+				if (response.ok) {
+					return response.json();
+				}
+			}).then(function(json) {
+				if (_this._isMounted && json && json.code == 0) {
+					_this.setState({
+						table: json.result
+					});
+				}
+			}).catch(e => {
+				console.log(e);
+				alert('数据获取失败');
+			});
 	}
 	query() {
 		return function(tag, value) {
 			let _this = this;
-			fetch(_this.props.source)
-				.then(function(response) {
-					return response.json();
-				}).then(function(json) {
-					console.log(json);
-					_this.setState({
-						table: [{
-							pv: 3400,
-							click: 55200,
-							ctr: 90000
-						}]
-					});
-				});
+			// 存储tag值
+			if (tag == 'date') {
+				_this._date = value;
+			} else {
+				_this._plat = value;
+			}
+			_this.loadData(_this._date, _this._plat);
 		}.bind(this);
 	}
 	render() {
@@ -109,29 +126,7 @@ class Detail extends React.Component {
 	componentDidMount() {
 		let _this = this;
 		_this._isMounted = true;
-		// 定义参数
-		let startDate = moment().subtract(_this._date || 0, 'd').format('YYYY-MM-DD');
-		let endDate = moment().format('YYYY-MM-DD');
-		let u = new URLSearchParams();
-		u.append('startDate', startDate);
-		u.append('endDate', endDate);
-		u.append('webType', _this._plat || -1);
-		// 发送请求
-		fetch(config.api.a_dayStat + '?' + u, {credentials: 'same-origin'})
-			.then(function(response) {
-				if (response.ok) {
-					return response.json();
-				}
-			}).then(function(json) {
-				if (_this._isMounted && json && json.code == 0) {
-					_this.setState({
-						table: json.result
-					});
-				}
-			}).catch(e => {
-				console.log(e);
-				alert('数据获取失败');
-			});
+		_this.loadData(0, -1);
 	}
 	componentWillUnmount() {
 		this._isMounted = false;

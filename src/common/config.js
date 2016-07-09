@@ -2,85 +2,91 @@
 
 let baseConfig = {};
 
+let i18n = {
+	RQ: '日期',
+	Today: '今天',
+	Yesterday: '昨天',
+	GQQT: '过去7天',
+	GQSST: '过去30天',
+
+	ALL: '汇总',
+	PC: 'PC',
+	WAP: '无线',
+
+	Advertiser: '广告主',
+	Agent: '代理商',
+	About: '关于',
+
+	Login: '登录',
+	Logout: '退出登录'
+}
+
 let apiConfig = {
 	login: '/api/login',
+	logout: '/api/logout',
 	a_summaryall: '/api/agent/summaryall',
 	a_costByDay: '/api/agent/costByDay',
 	a_clientStat: '/api/agent/clientStat',
-	a_dayStat: '/api/agent/dayStat'
+	a_dayStat: '/api/agent/dayStat',
+	c_summaryall: '/api/client/summaryall',
+	c_costByDay: '/api/client/costByDay',
+	c_dayStat: '/api/client/dayStat'
 };
 let mainTable = {
 	columns: [{
 		field: 'impression',
-		title: 'PV'
+		title: 'PV',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
 	}, {
 		field: 'click',
-		title: '点击'
+		title: '点击',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
 	}, {
 		field: 'ctr',
-		title: 'CTR'
+		title: 'CTR',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
 	}, {
 		field: 'cpc',
-		title: 'CPC'
+		title: 'CPC',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
 	}, {
 		field: 'eCpm',
 		title: 'eCPM',
 		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
 			value = $.trim(value);
 			return value;
 		}
 	}, {
 		field: 'cost',
-		title: '消耗'
+		title: '消耗',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
 	}],
 	responseHandler: function(res) {
-		res.rows = [{
-			id: 1,
-			name: 'Item 1',
-			ecpm: '$1'
-		}, {
-			id: 2,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 3,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 4,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 5,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 6,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 7,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 8,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 9,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 10,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 11,
-			name: 'Item 2',
-			ecpm: '$2'
-		}];
-		res.total = 100;
-		return res;
+		var data = {};
+		data.rows = res;
+		data.total = res.length;
+		return data;
 	},
 	queryParams: function(params) {
 		params.uid = 1;
@@ -109,53 +115,10 @@ let detailTable = {
 		title: 'CTR'
 	}],
 	responseHandler: function(res) {
-		res.rows = [{
-			id: 1,
-			name: 'Item 1',
-			ecpm: '$1'
-		}, {
-			id: 2,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 3,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 4,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 5,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 6,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 7,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 8,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 9,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 10,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 11,
-			name: 'Item 2',
-			ecpm: '$2'
-		}];
-		res.total = 100;
-		return res;
+		var data = {};
+		data.rows = res;
+		data.total = res.length;
+		return data;
 	},
 	queryParams: function(params) {
 		params.uid = 1;
@@ -184,53 +147,10 @@ let advertiserTable = {
 		title: 'CTR'
 	}],
 	responseHandler: function(res) {
-		res.rows = [{
-			id: 1,
-			name: 'Item 1',
-			ecpm: '$1'
-		}, {
-			id: 2,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 3,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 4,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 5,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 6,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 7,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 8,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 9,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 10,
-			name: 'Item 2',
-			ecpm: '$2'
-		}, {
-			id: 11,
-			name: 'Item 2',
-			ecpm: '$2'
-		}];
-		res.total = 100;
-		return res;
+		var data = {};
+		data.rows = res;
+		data.total = res.length;
+		return data;
 	},
 	queryParams: function(params) {
 		params.uid = 1;
@@ -239,6 +159,7 @@ let advertiserTable = {
 };
 
 let config = Object.assign({}, baseConfig, {
+	i18n: i18n,
 	api: apiConfig,
 	tableOption: {
 		mainTable: mainTable,

@@ -37,13 +37,16 @@
 	margin-right: 0px !important;
 }
 .footer-client {
-	width: 100%;
+	width: 80%;
+}
+.footer-me {
+	width: 20%;
 }
 .footer-agent {
-	width: 50%;
+	width: 40%;
 }
 .footer-advertiser {
-	width: 50%;
+	width: 40%;
 }
 .tab-total {
 	width: 25%;
@@ -78,4 +81,34 @@
 }
 .login-body {
 	background: url(../images/bodybg.jpg);
+}
+.logout {
+}
+.logout button {
+	position: absolute;
+	top: 80%;
+	width: 100%;
+	border-radius: 0;
+}
+.logout-container {
+	position: absolute;
+	top: 10%;
+	width: 100%;
+}
+.logout-logo {
+	display: block;
+	width: 178px;
+    height: 58px;
+    margin: 0 auto 1rem;
+    /*background: url(../images/logo.png) no-repeat;*/
+}
+.logout-des {
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	top: 30%;
+}
+.logout-des span{
+	display: block;
+	margin-bottom: 1rem;
 }
