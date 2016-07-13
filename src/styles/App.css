@@ -6,6 +6,17 @@
 	clear: both;
 	margin-bottom: 5rem;
 }
+.dataSeason {
+	text-align: center;
+	/*font-family: '微软雅黑';*/
+}
+.dateShow {
+	margin-top: -1rem;
+	margin-left: 1rem;
+}
+.tabHide {
+	display: none !important;
+}
 .today {
 	width: 20%;
 }
@@ -37,19 +48,25 @@
 	margin-right: 0px !important;
 }
 .footer-client {
-	width: 80%;
+	width: 50%;
+}
+.footer-cme {
+	width: 50%;
 }
 .footer-me {
-	width: 20%;
+	width: 33%;
 }
 .footer-agent {
-	width: 40%;
+	width: 33%;
 }
 .footer-advertiser {
-	width: 40%;
+	width: 34%;
 }
 .tab-total {
 	width: 25%;
+}
+.tab-total-75 {
+	width: 75%;
 }
 .tab-pc {
 	width: 25%;

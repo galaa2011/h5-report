@@ -38,10 +38,11 @@ class Tab extends React.Component {
 
 class Footer extends React.Component {
 	render() {
+		// {"/detail?date=" + this.props.date}
 		return (
 			<ul className="nav nav-tabs navbar-fixed-bottom">
-			   <li className="footer-client"><Link to="/detail">{this.props.userName || config.i18n.Advertiser}</Link></li>
-			   <li className="footer-me"><Link to="/about/0">{config.i18n.About}</Link></li>
+			   <li className="footer-client active"><Link to="/main">{this.props.userName || config.i18n.Advertiser}</Link></li>
+			   <li className="footer-cme"><Link to="/about/0">{config.i18n.About}</Link></li>
 			</ul>
 		);
 	}
@@ -52,22 +53,16 @@ class Client extends React.Component {
 		super(props);
 		this.state = {
 			chart: {
+				showTool: true,
+				date: 0,
 				series: [{
-					// name: 'PC',
+					name: '汇总',
 					type: 'line',
-					// // stack: '总量',
-					// areaStyle: {
-					// 	normal: {}
-					// },
-					// data: []
-				}, {
-					// name: '无线',
-					type: 'line',
-					// stack: '总量',
-					// areaStyle: {
-					// 	normal: {}
-					// },
-					// data: []
+					stack: '总量',
+					areaStyle: {
+						normal: {}
+					},
+					data: []
 				}],
 				xAxis: [{
 					type: 'category',
@@ -75,8 +70,29 @@ class Client extends React.Component {
 					data: []
 				}]
 			},
-			table: []
+			table: [],
+			dataSeason: ''
 		};
+	}
+	getQuarter() {
+		let _date = ['12-26~03-25', '03-26~06-25', '06-26~09-25', '09-26~12-25'];
+		let quarter = [],
+			start,
+			end,
+			year = moment().year();
+		_date.map((item, index) => {
+			if (index == 0) {
+				start = (year - 1) + '-' + item.split('~')[0];
+				end = year + '-' + item.split('~')[1];
+			} else {
+				start = year + '-' + item.split('~')[0];
+				end = year + '-' + item.split('~')[1];
+			}
+			if (moment().isBetween(start, end)) {
+				quarter.push(start, end);
+			}
+		});
+		return quarter;
 	}
 	loadData(value) {
 		let _this = this;
@@ -85,10 +101,12 @@ class Client extends React.Component {
 		let u = new URLSearchParams();
 		u.append('startDate', startDate);
 		u.append('endDate', endDate);
+		// 获取当季日期
+		let quarter = _this.getQuarter();
 		// 两个请求，都完成后再进行state的变化。
 		Promise.all([
 				fetch(config.api.c_summaryall + '?' + u, {credentials: 'same-origin'}).then(response => response.json()),
-				fetch(config.api.c_costByDay + '?' + u, {credentials: 'same-origin'}).then(response => response.json())
+				fetch(config.api.c_dayStat + '?' + u + '&webType=-1', {credentials: 'same-origin'}).then(response => response.json())
 			])
 			.then((jsons) => {
 				let table = [],
@@ -106,8 +124,10 @@ class Client extends React.Component {
 				}
 				this.setState({
 					chart: {
+						showTool: true,
+						date: value,
 						series: [{
-							name: 'PC',
+							name: '汇总',
 							type: 'line',
 							stack: '总量',
 							areaStyle: {
@@ -135,11 +155,13 @@ class Client extends React.Component {
 		}.bind(this);
 	}
 	render() {
-		let chart = {};
 		return (
 			<div className="main">
 				<div className="tabFilter">
 					<Tab query={this.query()}/>
+				</div>
+				<div className="dataSeason">
+					<span>当季业绩: {this.state.dataSeason} 元</span>
 				</div>
 				<div className="dataChart container">
 					<Chart data={this.state.chart}/>
@@ -148,7 +170,7 @@ class Client extends React.Component {
 					<Table option={config.tableOption.mainTable} data={this.state.table}/>
 				</div>
 				<div className="tabFooter">
-					<Footer userName={this.props.userName}/>
+					<Footer date={this.state.chart.date} userName={this.props.userName}/>
 				</div>
       		</div>
 		);

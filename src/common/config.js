@@ -55,6 +55,7 @@ let mainTable = {
 		formatter: function(value, row, index) {
 			value = value === -1 ? '-' : value;
 			value = $.trim(value);
+			value = (value === '-' || value == 0) ? value : (value * 1000).toFixed(2) + '‰';
 			return value;
 		}
 	}, {
@@ -75,7 +76,7 @@ let mainTable = {
 		}
 	}, {
 		field: 'cost',
-		title: '消耗',
+		title: '消耗(元)',
 		formatter: function(value, row, index) {
 			value = value === -1 ? '-' : value;
 			value = $.trim(value);
@@ -97,6 +98,7 @@ let detailTable = {
 	showToggle: true,
 	search: true,
 	pagination: true,
+	pageNumber: 1,
 	// sidePagination: 'server',
 	// url: apiConfig.a_dayStat,
 	pageList: [10, 25, 50, 100, 'ALL'],
@@ -106,13 +108,59 @@ let detailTable = {
 		title: '日期'
 	}, {
 		field: 'click',
-		title: '点击'
+		sortable: true,
+		title: '点击',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
 	}, {
 		field: 'cpc',
-		title: 'CPC'
+		sortable: true,
+		title: 'CPC',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
 	}, {
 		field: 'ctr',
-		title: 'CTR'
+		sortable: true,
+		title: 'CTR',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			value = (value === '-' || value == 0) ? value : (value * 1000).toFixed(2) + '‰';
+			return value;
+		}
+	}, {
+		field: 'impression',
+		sortable: true,
+		title: 'PV',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
+	}, {
+		field: 'eCpm',
+		sortable: true,
+		title: 'eCPM',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
+	}, {
+		field: 'cost',
+		sortable: true,
+		title: '消耗(元)',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
 	}],
 	responseHandler: function(res) {
 		var data = {};
@@ -129,6 +177,7 @@ let advertiserTable = {
 	showToggle: true,
 	search: true,
 	pagination: true,
+	pageNumber: 1,
 	pageList: [10, 25, 50, 100, 'ALL'],
 	columns: [{
 		field: 'clientName',
@@ -136,15 +185,58 @@ let advertiserTable = {
 	}, {
 		field: 'click',
 		sortable: true,
-		title: '点击'
+		title: '点击',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
 	}, {
 		field: 'cpc',
 		sortable: true,
-		title: 'CPC'
+		title: 'CPC',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
 	}, {
 		field: 'ctr',
 		sortable: true,
-		title: 'CTR'
+		title: 'CTR',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			value = (value === '-' || value == 0) ? value : (value * 1000).toFixed(2) + '‰';
+			return value;
+		}
+	}, {
+		field: 'impression',
+		sortable: true,
+		title: 'PV',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
+	}, {
+		field: 'eCpm',
+		sortable: true,
+		title: 'eCPM',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
+	}, {
+		field: 'cost',
+		sortable: true,
+		title: '消耗(元)',
+		formatter: function(value, row, index) {
+			value = value === -1 ? '-' : value;
+			value = $.trim(value);
+			return value;
+		}
 	}],
 	responseHandler: function(res) {
 		var data = {};

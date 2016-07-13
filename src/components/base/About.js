@@ -71,8 +71,8 @@ class Footer extends React.Component {
 		} else {
 			return (
 				<ul className="nav nav-tabs navbar-fixed-bottom">
-				   <li className="footer-client"><Link to="/detail">{this.props.userName || config.i18n.Advertiser}</Link></li>
-				   <li className="footer-me active"><Link to="/about/0">{config.i18n.About}</Link></li>
+				   <li className="footer-client"><Link to="/main">{this.props.userName || config.i18n.Advertiser}</Link></li>
+				   <li className="footer-cme active"><Link to="/about/0">{config.i18n.About}</Link></li>
 				</ul>
 			);
 		}

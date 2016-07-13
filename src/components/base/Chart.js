@@ -27,32 +27,21 @@ class Chart extends React.Component {
 		);
 	}
 	componentDidUpdate() {
+		let _this = this;
 		let series = this.props.data.series;
 		let xAxis = this.props.data.xAxis;
-		// let series = [{
-		// 	name: 'PC',
-		// 	type: 'line',
-		// 	stack: '总量',
-		// 	areaStyle: {
-		// 		normal: {}
-		// 	},
-		// 	data: [120, 132, 101, 134, 90, 230, 210]
-		// }, {
-		// 	name: '无线',
-		// 	type: 'line',
-		// 	stack: '总量',
-		// 	areaStyle: {
-		// 		normal: {}
-		// 	},
-		// 	data: [150, 232, 201, 154, 190, 330, 410]
-		// }];
-		// let xAxis = [{
-		// 	type: 'category',
-		// 	boundaryGap: false,
-		// 	data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-		// }];
+
 		this.option.baseOption.series = series;
 		this.option.baseOption.xAxis = xAxis;
+		this.option.baseOption.toolbox.feature.myTool = {
+			show: _this.props.data.showTool,
+			title: '详情',
+			icon: 'image://' + detailImage,
+			onclick: function() {
+				location.href = '/#/detail?date=' + _this.props.data.date;
+			}
+		};
+
 		this.myChart.clear();
 		this.myChart.hideLoading();
 		this.myChart.setOption(this.option);
@@ -67,13 +56,13 @@ class Chart extends React.Component {
 		this.option = {
 			baseOption: {
 				title: {
-					text: '堆叠区域图'
+					text: '消耗'
 				},
 				tooltip: {
 					trigger: 'axis'
 				},
 				legend: {
-					data: ['PC', '无线']
+					data: ['汇总']
 				},
 				toolbox: {
 					itemSize: 24,

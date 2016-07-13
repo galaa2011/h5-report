@@ -25,6 +25,7 @@ class Table extends React.Component {
 	}
 	componentDidUpdate() {
 		let data = this.props.data;
+		$(this.refs.table).bootstrapTable('refreshOptions', this.props.option);
 		$(this.refs.table).bootstrapTable('load', data);
 	}
 	componentDidMount() {

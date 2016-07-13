@@ -23,23 +23,33 @@ class Tab extends React.Component {
 		}.bind(this);
 	}
 	render() {
+		let total, pc, wap;
+		if (this.props.date == 0) {
+			total = 'active tab-total-75';
+			pc = 'tabHide';
+			wap = 'tabHide';
+		} else {
+			total = 'active tab-total';
+			pc = 'tab-pc';
+			wap = 'tab-wap';
+		}
 		return (
 			<div>
 				<ul className="nav nav-tabs tab-date">
 					<li className="dropdown active date-select">
 			      		<a href="#" id="tabDrop" className="dropdown-toggle" data-toggle="dropdown">{config.i18n.RQ}<b className="caret"></b></a>
-			      		<ul className="dropdown-menu" role="menu" aria-labelledby="tabDrop">
-			         		<li className="active" style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 0)}>{config.i18n.Today}</a></li>
-			         		<li style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 1)}>{config.i18n.Yesterday}</a></li>
-			         		<li style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 7)}>{config.i18n.GQQT}</a></li>
-			         		<li style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 30)}>{config.i18n.GQSST}</a></li>
+			      		<ul ref="dateDrop" className="dropdown-menu" role="menu" aria-labelledby="tabDrop">
+			         		<li value="0" className="active" style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 0)}>{config.i18n.Today}</a></li>
+			         		<li value="1" style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 1)}>{config.i18n.Yesterday}</a></li>
+			         		<li value="7" style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 7)}>{config.i18n.GQQT}</a></li>
+			         		<li value="30" style={{textAlign: 'left'}}><a href="#" tabindex="-1" data-toggle="tab" onClick={this.handleChange('date', 30)}>{config.i18n.GQSST}</a></li>
 			            </ul>
 			        </li>
 				</ul>
 				<ul className="nav nav-tabs">
-				   	<li className="active tab-total"><a href="#" data-toggle="tab" onClick={this.handleChange('plat', -1)}>{config.i18n.ALL}</a></li>
-				   	<li className="tab-pc"><a href="#" data-toggle="tab" onClick={this.handleChange('plat', 0)}>{config.i18n.PC}</a></li>
-				   	<li className="tab-wap"><a href="#" data-toggle="tab" onClick={this.handleChange('plat', 1)}>{config.i18n.WAP}</a></li>
+				   	<li className={total}><a href="#" data-toggle="tab" onClick={this.handleChange('plat', -1)}>{config.i18n.ALL}</a></li>
+				   	<li className={pc}><a href="#" data-toggle="tab" onClick={this.handleChange('plat', 0)}>{config.i18n.PC}</a></li>
+				   	<li className={wap}><a href="#" data-toggle="tab" onClick={this.handleChange('plat', 1)}>{config.i18n.WAP}</a></li>
 				</ul>
 			</div>
 		);
@@ -50,8 +60,8 @@ class Footer extends React.Component {
 	render() {
 		return (
 			<ul className="nav nav-tabs navbar-fixed-bottom">
-			   <li className="footer-client active"><Link to="/main">{this.props.userName || config.i18n.Advertiser}</Link></li>
-			   <li className="footer-me"><Link to="/about/0">{config.i18n.About}</Link></li>
+			   <li className="footer-client"><Link to="/main">{this.props.userName || config.i18n.Advertiser}</Link></li>
+			   <li className="footer-cme"><Link to="/about/0">{config.i18n.About}</Link></li>
 			</ul>
 		);
 	}
@@ -61,6 +71,7 @@ class Detail extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			date: '0',
 			table: []
 		};
 	}
@@ -75,6 +86,21 @@ class Detail extends React.Component {
 		u.append('startDate', startDate);
 		u.append('endDate', endDate);
 		u.append('webType', plat);
+
+		// 判断表头名称【日期】<=>【时间】
+		let _index = 0;
+		if (date == 0) {
+			for (let i = 0; i < config.tableOption.detailTable.columns.length; i++) {
+				if (config.tableOption.detailTable.columns[i].field === 'statDate') {
+					config.tableOption.detailTable.columns[i].title = '时间';
+					_index = i;
+					break;
+				}
+			};
+		} else {
+			config.tableOption.detailTable.columns[_index].title = '日期';
+		}
+
 		// 发送请求
 		fetch(config.api.c_dayStat + '?' + u, {
 				credentials: 'same-origin'
@@ -86,6 +112,7 @@ class Detail extends React.Component {
 			}).then(function(json) {
 				if (_this._isMounted && json && json.code == 0) {
 					_this.setState({
+						date: date,
 						table: json.result
 					});
 				}
@@ -107,11 +134,19 @@ class Detail extends React.Component {
 		}.bind(this);
 	}
 	render() {
-		let chart = {};
+		let date = {
+			'0': config.i18n.Today,
+			'1': config.i18n.Yesterday,
+			'7': config.i18n.GQQT,
+			'30': config.i18n.GQSST
+		};
 		return (
 			<div className="main">
 				<div className="tabFilter">
-					<Tab query={this.query()} />
+					<Tab date={this.state.date} ref='tabFilter' query={this.query()} />
+				</div>
+				<div className="dateShow">
+					<span>{date[this.state.date]}</span>
 				</div>
 				<div className="dataTable container">
 					<Table option={config.tableOption.detailTable} data={this.state.table}/>
@@ -125,7 +160,21 @@ class Detail extends React.Component {
 	componentDidMount() {
 		let _this = this;
 		_this._isMounted = true;
-		_this.loadData(0, -1);
+
+		let date;
+		let query = location.hash.split('?')[1];
+		let u = new URLSearchParams(query);
+		date = u.get('date');
+		_this.loadData(date, -1);
+		// 渲染下拉时间
+		let lis = this.refs.tabFilter.refs.dateDrop.children;
+		for (let i = 0; i < lis.length; i++) {
+			if (date == lis[i].value) {
+				lis[i].className = 'active';
+			} else {
+				lis[i].className = '';
+			}
+		};
 	}
 	componentWillUnmount() {
 		this._isMounted = false;
