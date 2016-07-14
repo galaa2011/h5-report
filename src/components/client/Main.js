@@ -103,16 +103,22 @@ class Client extends React.Component {
 		u.append('endDate', endDate);
 		// 获取当季日期
 		let quarter = _this.getQuarter();
+		let u2 = new URLSearchParams();
+		u2.append('startDate', quarter[0]);
+		u2.append('endDate', quarter[1]);
+
 		// 两个请求，都完成后再进行state的变化。
 		Promise.all([
 				fetch(config.api.c_summaryall + '?' + u, {credentials: 'same-origin'}).then(response => response.json()),
-				fetch(config.api.c_dayStat + '?' + u + '&webType=-1', {credentials: 'same-origin'}).then(response => response.json())
+				fetch(config.api.c_dayStat + '?' + u + '&webType=-1', {credentials: 'same-origin'}).then(response => response.json()),
+				fetch(config.api.c_confirmCost + '?' + u2, {credentials: 'same-origin'}).then(response => response.json())
 			])
 			.then((jsons) => {
 				let table = [],
 					chart = {},
 					series_data = [],
-					xAxis_data = [];
+					xAxis_data = [],
+					dataSeason = '';
 				if (jsons[0].code == 0) {
 					table.push(jsons[0].result);
 				}
@@ -121,6 +127,9 @@ class Client extends React.Component {
 						series_data.push(data.cost);
 						xAxis_data.push(data.statDate);
 					});
+				}
+				if (jsons[2].code == 0) {
+					dataSeason = jsons[2].result;
 				}
 				this.setState({
 					chart: {
@@ -141,7 +150,8 @@ class Client extends React.Component {
 							data: xAxis_data
 						}]
 					},
-					table: table
+					table: table,
+					dataSeason: dataSeason
 				});
 			}).catch(e => {
 				console.log(e);

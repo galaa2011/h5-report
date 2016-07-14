@@ -34,7 +34,8 @@ class Chart extends React.Component {
 		this.option.baseOption.series = series;
 		this.option.baseOption.xAxis = xAxis;
 		this.option.baseOption.toolbox.feature.myTool = {
-			show: _this.props.data.showTool,
+			// show: _this.props.data.showTool,
+			show: true,
 			title: '详情',
 			icon: 'image://' + detailImage,
 			onclick: function() {

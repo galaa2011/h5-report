@@ -78,7 +78,7 @@ class Detail extends React.Component {
 	}
 	loadData(date, plat) {
 		let _this = this;
-		date = date === undefined ? 0 : date;
+		date = date === undefined ? _this.state.date : date;
 		plat = plat === undefined ? -1 : plat;
 		// 定义参数
 		let startDate = moment().subtract(date, 'd').format('YYYY-MM-DD');

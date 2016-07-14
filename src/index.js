@@ -23,35 +23,34 @@ let api = require('./common/config').api;
 		var Res = (new RegExp(name + "=([^;]+)")).exec(document.cookie);
 		return Res == null ? null : Res[1]
 	};
-	debugger;
-	if (getCookie('Statistics_stat')) {
+	let login = function() {
 		let platform;
-		let query = location.hash.split('?')[1];
-		let u = new URLSearchParams(query);
-		platform = u.get('platform');
-		if (!platform) {
-			fetch(api.login, {
-					credentials: 'same-origin'
-				})
-				.then(function(response) {
-					if (response.ok) {
-						return response.json();
-					}
-				}).then(function(json) {
-					if (json && json.code == 0) {
-						platform = json.result.platform;
-						init(platform, json.result.name);
-					} else {
-						alert(json.message.global);
-						top.location.href = "/login.html";
-					}
-				}).catch(e => {
-					console.log(e);
-					alert('数据获取失败');
-				});
-		} else {
-			init(platform, status.nick);
-		}
+		// let query = location.hash.split('?')[1];
+		// let u = new URLSearchParams(query);
+		// platform = u.get('platform');
+		fetch(api.login, {
+				credentials: 'same-origin'
+			})
+			.then(function(response) {
+				if (response.ok) {
+					return response.json();
+				}
+			}).then(function(json) {
+				if (json && json.code == 0) {
+					platform = json.result.platform;
+					init(platform, json.result.name);
+				} else {
+					alert(json.message.global);
+					top.location.href = "/login.html";
+				}
+			}).catch(e => {
+				console.log(e);
+				alert('数据获取失败');
+			});
+	};
+
+	if (getCookie('Statistics_stat')) {
+		login();
 	} else {
 		sinaSSOController.autoLogin(function(status) {
 			if (status == null) {
@@ -59,33 +58,7 @@ let api = require('./common/config').api;
 					top.location.href = "/login.html";
 				}
 			} else {
-				// 判断登录平台，如果没有则重新请求。
-				let platform;
-				let query = location.hash.split('?')[1];
-				let u = new URLSearchParams(query);
-				platform = u.get('platform');
-				if (!platform) {
-					fetch(api.login, {
-							credentials: 'same-origin'
-						})
-						.then(function(response) {
-							if (response.ok) {
-								return response.json();
-							}
-						}).then(function(json) {
-							if (json && json.code == 0) {
-								platform = json.result.platform;
-								init(platform, status.nick);
-							} else {
-								alert(json.message.global);
-							}
-						}).catch(e => {
-							console.log(e);
-							alert('数据获取失败');
-						});
-				} else {
-					init(platform, status.nick);
-				}
+				login();
 			}
 		});
 	}

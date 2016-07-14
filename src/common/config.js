@@ -26,10 +26,12 @@ let apiConfig = {
 	logout: '/api/logout',
 	a_summaryall: '/api/agent/summaryall',
 	a_costByDay: '/api/agent/costByDay',
+	a_confirmCost: '/api/agent/confirmCost',
 	a_clientStat: '/api/agent/clientStat',
 	a_dayStat: '/api/agent/dayStat',
 	c_summaryall: '/api/client/summaryall',
 	c_costByDay: '/api/client/costByDay',
+	c_confirmCost: '/api/client/confirmCost',
 	c_dayStat: '/api/client/dayStat'
 };
 let mainTable = {
@@ -96,7 +98,7 @@ let mainTable = {
 };
 let detailTable = {
 	showToggle: true,
-	search: true,
+	// search: true,
 	pagination: true,
 	pageNumber: 1,
 	// sidePagination: 'server',

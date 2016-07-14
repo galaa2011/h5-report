@@ -94,11 +94,16 @@ class About extends React.Component {
 	}
 	componentDidMount() {
 		let _this = this;
+		let exp = new Date();
+		exp.setTime(exp.getTime() - 1);
+
 		(function() {
 			this.entry = "account";
 			this.setDomain = false;
 			this.customLogoutCallBack = function(status) {
 				if (status && status.result) {
+					// 退出时清楚cookie值
+					document.cookie = "Statistics_stat=" + ";domain=;expires=" + exp.toGMTString() + ";path=/";
 					top.location.href = "/login.html";
 				} else {
 					alert(status.reason || "注销登录失败，请重试");
